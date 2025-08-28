@@ -59,7 +59,14 @@ async def register_vendor(
         ).first()
         
         if existing_user:
-            return {"success": False, "message": "Email or mobile already exists"}
+            return {
+                "success": False, 
+                "message": "Email or mobile already exists",
+                "details": {
+                    "email_exists": existing_user.email == email,
+                    "mobile_exists": existing_user.mobile == mobile
+                }
+            }
             
         # Create new vendor
         new_vendor = Vendor(
@@ -98,7 +105,14 @@ async def register_buyer(
         ).first()
         
         if existing_user:
-            return {"success": False, "message": "Email or mobile already exists"}
+            return {
+                "success": False, 
+                "message": "Email or mobile already exists",
+                "details": {
+                    "email_exists": existing_user.email == email,
+                    "mobile_exists": existing_user.mobile == mobile
+                }
+            }
             
         # Create new buyer
         new_buyer = Buyer(
