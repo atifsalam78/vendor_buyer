@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Subscription Plans - BazaarHub{% endblock %}
+
+{% block nav_content %}
+<div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/plans" class="active">Plans</a>
+    <a href="/login" class="btn btn-primary">Login / Register</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<section class="plans-hero">
+    <div class="container">
+        <h1>Subscription Plans</h1>
+        <p class="subtitle">Choose the right plan for your business needs</p>
+    </div>
+</section>
+
+<section class="pricing-section">
+    <div class="container">
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-header">
+                    <h3>Basic</h3>
+                    <p class="price">Free</p>
+                    <p class="billing-cycle">Forever</p>
+                </div>
+                <div class="pricing-features">
+                    <ul>
+                        <li>Basic profile listing</li>
+                        <li>5 connections per month</li>
+                        <li>Email support</li>
+                        <li>Basic search functionality</li>
+                    </ul>
+                </div>
+                <div class="pricing-cta">
+                    <a href="/login" class="btn btn-secondary">Get Started</a>
+                </div>
+            </div>
+            
+            <div class="pricing-card featured">
+                <div class="pricing-header">
+                    <h3>Professional</h3>
+                    <p class="price">$29</p>
+                    <p class="billing-cycle">per month</p>
+                </div>
+                <div class="pricing-features">
+                    <ul>
+                        <li>Enhanced profile with images</li>
+                        <li>50 connections per month</li>
+                        <li>Priority email support</li>
+                        <li>Advanced search filters</li>
+                        <li>Business analytics dashboard</li>
+                        <li>Featured in search results</li>
+                    </ul>
+                </div>
+                <div class="pricing-cta">
+                    <a href="/login" class="btn btn-primary">Get Started</a>
+                </div>
+            </div>
+            
+            <div class="pricing-card">
+                <div class="pricing-header">
+                    <h3>Enterprise</h3>
+                    <p class="price">$99</p>
+                    <p class="billing-cycle">per month</p>
+                </div>
+                <div class="pricing-features">
+                    <ul>
+                        <li>Premium profile customization</li>
+                        <li>Unlimited connections</li>
+                        <li>24/7 dedicated support</li>
+                        <li>All advanced features</li>
+                        <li>Comprehensive analytics</li>
+                        <li>Top placement in search results</li>
+                        <li>API access for integration</li>
+                        <li>Dedicated account manager</li>
+                    </ul>
+                </div>
+                <div class="pricing-cta">
+                    <a href="/login" class="btn btn-secondary">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="faq-section">
+    <div class="container">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-grid">
+            <div class="faq-item">
+                <h3>Can I upgrade or downgrade my plan?</h3>
+                <p>Yes, you can change your subscription plan at any time. Changes will be applied at the start of your next billing cycle.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Is there a contract or commitment?</h3>
+                <p>No, all our plans are month-to-month with no long-term contracts. You can cancel anytime.</p>
+            </div>
+            <div class="faq-item">
+                <h3>What payment methods do you accept?</h3>
+                <p>We accept all major credit cards, PayPal, and bank transfers for Enterprise plans.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Do you offer discounts for annual subscriptions?</h3>
+                <p>Yes, you can save 20% by choosing annual billing on any of our paid plans.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="container">
+        <h2>Ready to Grow Your Business?</h2>
+        <p>Join thousands of businesses already connecting on BazaarHub.</p>
+        <a href="/login" class="btn btn-primary">Register Now</a>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if user is logged in
+        const token = localStorage.getItem('access_token');
+        if (token) {
+            // Update navigation for logged-in users
+            const loginBtn = document.querySelector('.nav-links .btn-primary');
+            if (loginBtn) {
+                loginBtn.textContent = 'My Profile';
+                loginBtn.href = '/profile';
+            }
+        }
+    });
+</script>
+{% endblock %}

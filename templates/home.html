@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}BazaarHub - Connect Buyers and Vendors{% endblock %}
+
+{% block nav_content %}
+<div class="nav-links">
+    <a href="/" class="active">Home</a>
+    <a href="/about">About</a>
+    <a href="/plans">Plans</a>
+    <a href="/login" class="btn btn-primary">Login / Register</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="container">
+        <div class="hero-content">
+            <h1>Connect with the Right Business Partners</h1>
+            <p>BazaarHub brings together vendors and buyers on a single platform, making B2B connections easier than ever.</p>
+            <div class="cta-buttons">
+                <a href="/login" class="btn btn-primary">Get Started</a>
+                <a href="/about" class="btn btn-secondary">Learn More</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="features-section">
+    <div class="container">
+        <h2 class="section-title">Why Choose BazaarHub?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🔍</div>
+                <h3>Find Trusted Partners</h3>
+                <p>Connect with verified vendors and serious buyers from around the world.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🤝</div>
+                <h3>Easy Connections</h3>
+                <p>Our platform simplifies the process of finding and connecting with potential business partners.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Business Growth</h3>
+                <p>Expand your business reach and discover new opportunities in the global market.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Secure Platform</h3>
+                <p>Your business information is protected with our secure authentication system.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="testimonials-section">
+    <div class="container">
+        <h2 class="section-title">What Our Users Say</h2>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <p class="testimonial-text">"BazaarHub helped us connect with reliable vendors that we couldn't find elsewhere. Our business has grown 30% since joining."</p>
+                <div class="testimonial-author">
+                    <p class="author-name">Sarah Johnson</p>
+                    <p class="author-title">Procurement Manager</p>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"As a vendor, I've found serious buyers through BazaarHub that have become long-term clients. The platform is intuitive and effective."</p>
+                <div class="testimonial-author">
+                    <p class="author-name">Michael Chen</p>
+                    <p class="author-title">Business Owner</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="container">
+        <h2>Ready to Transform Your Business?</h2>
+        <p>Join thousands of businesses already growing with BazaarHub.</p>
+        <a href="/login" class="btn btn-primary">Register Now</a>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if user is logged in
+        const token = localStorage.getItem('access_token');
+        if (token) {
+            // Update navigation for logged-in users
+            const loginBtn = document.querySelector('.nav-links .btn-primary');
+            if (loginBtn) {
+                loginBtn.textContent = 'My Profile';
+                loginBtn.href = '/profile';
+            }
+        }
+    });
+</script>
+{% endblock %}

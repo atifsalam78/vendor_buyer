@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - BazaarHub{% endblock %}
+
+{% block nav_content %}
+<div class="nav-profile">
+    <button class="btn btn-secondary" id="logout-btn">Logout</button>
+</div>
+{% endblock %}
+
+{% block content %}
+<section class="profile-section">
+    <div class="container">
+        <h1>Welcome to Your Profile</h1>
+        <div class="profile-info" id="profile-info">
+            <!-- Profile information will be loaded dynamically -->
+            <p>Loading profile information...</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if user is logged in
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+            window.location.href = '/login';
+            return;
+        }
+        
+        // Load profile information
+        fetch('/api/profile', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Not authorized');
+            }
+            return response.json();
+        })
+        .then(data => {
+            displayProfile(data);
+        })
+        .catch(error => {
+            console.error('Error loading profile:', error);
+            localStorage.removeItem('access_token');
+            window.location.href = '/login';
+        });
+        
+        // Logout button
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            localStorage.removeItem('access_token');
+            window.location.href = '/login';
+        });
+    });
+    
+    function displayProfile(data) {
+        const profileInfo = document.getElementById('profile-info');
+        
+        // Create profile content based on user type
+        let html = '';
+        
+        if (data.user_type === 'vendor') {
+            html = `
+                <div class="profile-card">
+                    <h2>${data.business_name}</h2>
+                    <p class="profile-type">Vendor</p>
+                    <div class="profile-details">
+                        <p><strong>Email:</strong> ${data.email}</p>
+                        <p><strong>Business Category:</strong> ${data.business_category}</p>
+                        <p><strong>Business Type:</strong> ${data.business_type}</p>
+                        <p><strong>Year Established:</strong> ${data.year_established}</p>
+                        <p><strong>Address:</strong> ${data.business_address}</p>
+                        <p><strong>Location:</strong> ${data.city}, ${data.state}, ${data.country}</p>
+                        <p><strong>Mobile:</strong> ${data.mobile}</p>
+                        ${data.landline ? `<p><strong>Landline:</strong> ${data.landline}</p>` : ''}
+                        ${data.website ? `<p><strong>Website:</strong> <a href="${data.website}" target="_blank">${data.website}</a></p>` : ''}
+                        <p><strong>Member Since:</strong> ${new Date(data.date_joined).toLocaleDateString()}</p>
+                    </div>
+                </div>
+            `;
+        } else {
+            html = `
+                <div class="profile-card">
+                    <h2>${data.buyer_name}</h2>
+                    <p class="profile-type">Buyer</p>
+                    <div class="profile-details">
+                        <p><strong>Email:</strong> ${data.email}</p>
+                        <p><strong>Company:</strong> ${data.company_name}</p>
+                        <p><strong>Designation:</strong> ${data.designation}</p>
+                        <p><strong>Address:</strong> ${data.company_address}</p>
+                        <p><strong>Location:</strong> ${data.city}, ${data.state}, ${data.country}</p>
+                        <p><strong>Mobile:</strong> ${data.mobile}</p>
+                        ${data.website ? `<p><strong>Website:</strong> <a href="${data.website}" target="_blank">${data.website}</a></p>` : ''}
+                        <p><strong>Member Since:</strong> ${new Date(data.date_joined).toLocaleDateString()}</p>
+                    </div>
+                </div>
+            `;
+        }
+        
+        profileInfo.innerHTML = html;
+    }
+</script>
+{% endblock %}

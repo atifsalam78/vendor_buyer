@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}About BazaarHub{% endblock %}
+
+{% block nav_content %}
+<div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/about" class="active">About</a>
+    <a href="/plans">Plans</a>
+    <a href="/login" class="btn btn-primary">Login / Register</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<section class="about-hero">
+    <div class="container">
+        <h1>About BazaarHub</h1>
+        <p class="subtitle">Connecting businesses worldwide through a trusted B2B platform</p>
+    </div>
+</section>
+
+<section class="about-mission">
+    <div class="container">
+        <div class="mission-content">
+            <h2>Our Mission</h2>
+            <p>BazaarHub was founded with a simple yet powerful mission: to create a seamless connection between vendors and buyers in the global marketplace. We believe that every business, regardless of size, deserves access to quality partnerships that drive growth and innovation.</p>
+            <p>Our platform eliminates geographical barriers and streamlines the process of finding reliable business partners, allowing companies to focus on what they do best - running their business.</p>
+        </div>
+    </div>
+</section>
+
+<section class="about-values">
+    <div class="container">
+        <h2>Our Values</h2>
+        <div class="values-grid">
+            <div class="value-card">
+                <h3>Trust</h3>
+                <p>We verify all businesses on our platform to ensure a trustworthy environment for all users.</p>
+            </div>
+            <div class="value-card">
+                <h3>Innovation</h3>
+                <p>We continuously improve our platform to provide the best tools for business connections.</p>
+            </div>
+            <div class="value-card">
+                <h3>Inclusivity</h3>
+                <p>We welcome businesses of all sizes and from all industries to create a diverse marketplace.</p>
+            </div>
+            <div class="value-card">
+                <h3>Security</h3>
+                <p>We prioritize the protection of your business information and communications.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="about-team">
+    <div class="container">
+        <h2>Our Team</h2>
+        <p>BazaarHub is powered by a dedicated team of professionals with extensive experience in business development, technology, and customer service. Our diverse backgrounds and expertise allow us to understand the unique challenges businesses face in the global marketplace.</p>
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="container">
+        <h2>Join Our Growing Community</h2>
+        <p>Become part of the BazaarHub network and transform how you connect with business partners.</p>
+        <a href="/login" class="btn btn-primary">Register Now</a>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if user is logged in
+        const token = localStorage.getItem('access_token');
+        if (token) {
+            // Update navigation for logged-in users
+            const loginBtn = document.querySelector('.nav-links .btn-primary');
+            if (loginBtn) {
+                loginBtn.textContent = 'My Profile';
+                loginBtn.href = '/profile';
+            }
+        }
+    });
+</script>
+{% endblock %}
