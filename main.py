@@ -1,27 +1,29 @@
-from fastapi import FastAPI, Request, Depends, Form, HTTPException
-from fastapi.templating import Jinja2Templates
+from fastapi import Request, Depends, Form, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, RedirectResponse
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
-import os
-from pathlib import Path
+from sqlalchemy import select
 
 # Import models and database
 from models import Base, User, Vendor, Buyer
-from config import engine, SessionLocal, app, templates
+from config import engine, AsyncSessionLocal, app, templates
 
-# Drop all tables and recreate them
-Base.metadata.drop_all(bind=engine)
-Base.metadata.create_all(bind=engine)
+# Async function to drop and recreate tables
+async def init_db():
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.drop_all)
+        await conn.run_sync(Base.metadata.create_all)
+ 
+# Initialize database on startup
+@app.on_event("startup")
+async def startup_event():
+    await init_db()
 
-# Dependency to get the database session
-def get_db():
-    db = SessionLocal()
-    try:
+# Async dependency to get the database session
+async def get_db():
+    async with AsyncSessionLocal() as db:
         yield db
-    finally:
-        db.close()
 
 # Mount static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -46,7 +48,7 @@ async def plans(request: Request):
 @app.post("/register/vendor")
 async def register_vendor(
     request: Request,
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_db)
 ):
     form_data = await request.form()
     email = form_data.get("email")
@@ -54,9 +56,12 @@ async def register_vendor(
     mobile = form_data.get("mobile")
     try:
         # Check if user already exists
-        existing_user = db.query(User).filter(
-            (User.email == email) | (User.mobile == mobile)
-        ).first()
+        result = await db.execute(
+            select(User).where(
+                (User.email == email) | (User.mobile == mobile)
+            )
+        )
+        existing_user = result.scalars().first()
         
         if existing_user:
             return {
@@ -78,7 +83,7 @@ async def register_vendor(
         
         # Add to database
         db.add(new_vendor)
-        db.commit()
+        await db.commit()
         
         return {"success": True, "message": "Vendor registered successfully"}
     except IntegrityError:
@@ -92,7 +97,7 @@ async def register_vendor(
 @app.post("/register/buyer")
 async def register_buyer(
     request: Request,
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_db)
 ):
     form_data = await request.form()
     email = form_data.get("email")
@@ -100,9 +105,12 @@ async def register_buyer(
     mobile = form_data.get("mobile")
     try:
         # Check if user already exists
-        existing_user = db.query(User).filter(
-            (User.email == email) | (User.mobile == mobile)
-        ).first()
+        result = await db.execute(
+            select(User).where(
+                (User.email == email) | (User.mobile == mobile)
+            )
+        )
+        existing_user = result.scalars().first()
         
         if existing_user:
             return {
@@ -124,7 +132,7 @@ async def register_buyer(
         
         # Add to database
         db.add(new_buyer)
-        db.commit()
+        await db.commit()
         
         return {"success": True, "message": "Buyer registered successfully"}
     except IntegrityError:

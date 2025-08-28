@@ -1,18 +1,18 @@
 from fastapi import FastAPI
 from fastapi.templating import Jinja2Templates
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 import os
 from pathlib import Path
 
-# Base declarative class
-Base = declarative_base()
-
 # Database configuration
-SQLALCHEMY_DATABASE_URL = "sqlite:///./bazaarhub.db"
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+DATABASE_URL = "postgresql+asyncpg://neondb_owner:npg_aVFeM96EgyWd@ep-autumn-hill-ad4xrr4g-pooler.c-2.us-east-1.aws.neon.tech/neondb?ssl=require"
+engine = create_async_engine(DATABASE_URL)
+AsyncSessionLocal = sessionmaker(
+    bind=engine,
+    class_=AsyncSession,
+    expire_on_commit=False
+)
 
 # FastAPI app configuration
 app = FastAPI(title="BazaarHub")
